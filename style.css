@@ -1,0 +1,55 @@
+
+body {
+  background-color: black;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding-top: 50px;
+}
+
+h1 {  
+  color: #E82127;  
+  font-family: 'Proxima Nova';
+  font-size: 80px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.input-section {
+  text-align: center;
+  margin-bottom: 30px; /* space between input and buttons */
+}
+input {
+  text-align: center;
+  margin: 20px auto;
+  padding: 15px 20px;
+  font-size: 20px;
+  border: 2px solid #E82127;
+  border-radius: 7px;
+  background-color: #1A1A1A;
+  color: #D4AF37;
+}
+
+button {
+  padding: 12px 20px;
+  font-family: 'Roboto';
+  font-size: 20px;
+  margin-top: 12px;
+  border: 3px solid #E82127;
+  background-color: #2D2D2D;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+  background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+#sendCommand {
+  padding: 15px 20px;
+  margin-left: 20px;
+  font-size: 19px;
+  border-radius: 4px;
+  border: none;
+}

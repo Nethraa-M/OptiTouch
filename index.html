@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>OptiTouch</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    #messageBox {
+      margin-top: 8px;
+      padding: 8px 12px;
+      background-color: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      min-height: 24px;
+      border-radius: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <h1>Control Your Optimus</h1>
+
+  <div class="input-section">
+    <input type="text" id="commandInput" placeholder="Type a command" />
+    <button id="sendCommand">Send Command</button>
+  </div>
+
+  <div class="button-group">
+    <button data-command="Move Forward">Move Forward</button>
+    <button data-command="Pick Up Object">Pick Up Object</button>
+    <button data-command="Say Hello">Say Hello</button>
+  </div>
+
+  <div id="buttons-container"></div>
+
+  <div id="messageBox"></div>
+
+  <script>
+    const input = document.getElementById('commandInput');
+    const sendBtn = document.getElementById('sendCommand');
+    const container = document.getElementById('buttons-container');
+    const messageBox = document.getElementById('messageBox');
+
+    function showMessage(msg) {
+      messageBox.textContent = msg;
+    }
+
+    // Add click listeners to any button (preset or dynamic)
+    function addClickListener(button, isDynamic = false) {
+      let clickCount = 0;
+
+      button.addEventListener('click', () => {
+        const commandText = button.textContent;
+
+        showMessage(`Command "${commandText}" sent to Optimus.`);
+
+        if (isDynamic) {
+          clickCount++;
+          if (clickCount === 2) {
+            button.remove();
+            showMessage(`Command "${commandText}" deleted.`);
+            clickCount = 0;
+          }
+          // Reset clickCount if no second click in 1 second
+          setTimeout(() => {
+            clickCount = 0;
+          }, 1000);
+        }
+      });
+    }
+
+    // Initialize click listeners on preset buttons
+    document.querySelectorAll('.button-group button').forEach(btn => {
+      addClickListener(btn, false);
+    });
+
+    // Add new command button if not already present in any buttons (preset or dynamic)
+    function addCommandButton(commandText) {
+      if (!commandText.trim()) return;
+
+      const normalized = commandText.trim().toLowerCase();
+
+      // Gather all buttons from both preset and dynamic areas
+      const allButtons = [
+        ...document.querySelectorAll('.button-group button'),
+        ...container.children
+      ];
+
+      const exists = allButtons.some(btn => btn.textContent.toLowerCase() === normalized);
+      if (exists) {
+        showMessage(`Command "${commandText}" already exists.`);
+        return false;
+      }
+
+      const newBtn = document.createElement('button');
+      newBtn.textContent = commandText;
+      addClickListener(newBtn, true);
+      container.appendChild(newBtn);
+
+      showMessage(`Command "${commandText}" sent to Optimus. (Click twice to delete box)`);
+      return true;
+    }
+
+    sendBtn.addEventListener('click', () => {
+      const userCommand = input.value.trim();
+      if (!userCommand) {
+        showMessage("Please enter a command.");
+        return;
+      }
+
+      // Try adding the button
+      const added = addCommandButton(userCommand);
+      if (added) {
+        input.value = "";
+        input.focus();
+      } else {
+        // If already exists, just show message that command sent
+        showMessage(`Command "${userCommand}" sent to Optimus.`);
+      }
+    });
+
+    // Also allow Enter key to trigger the Send Command button
+    input.addEventListener('keyypress', (e) => {
+      if (e.key === 'Enter') {
+        sendBtn.click();
+      }
+    });
+  </script>
+</body>
+</html>
